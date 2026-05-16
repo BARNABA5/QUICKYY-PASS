@@ -1,0 +1,278 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  background: #0f172a;
+  color: #c71717;
+}
+
+/* HEADER */
+.main-header {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+.main-header h1 {
+  font-size: 40px;
+  letter-spacing: 1px;
+}
+
+.main-header p {
+  opacity: 0.9;
+  margin-top: 5px;
+}
+
+/* CONTAINER */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px 0;
+}
+
+/* EVENTS GRID */
+.events {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* EVENT CARD */
+.event-card {
+  background: #1e293b;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  transition: 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+}
+
+.event-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+/* TEXT */
+.event-card h2 {
+  margin: 10px;
+  font-size: 20px;
+}
+
+.event-card p {
+  margin: 5px 10px;
+  font-size: 14px;
+  color: #f8fbff;
+}
+
+.event-card h3 {
+  margin: 10px;
+  color: #22c55e;
+}
+
+/* BUTTON */
+.book-btn {
+  width: 90%;
+  margin: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.book-btn:hover {
+  background: #1d4ed8;
+}
+/* ==========================================================================
+   1. RESET & BASE STYLES
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f7f6;
+  color: #333333;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   2. HEADER
+   ========================================================================== */
+.main-header {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: #ffffff;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.5rem;
+}
+
+.main-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   3. CONTAINER & CARD STRUCTURE
+   ========================================================================== */
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem 1.5rem;
+}
+
+.booking-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.booking-card h2 {
+  font-size: 1.5rem;
+  color: #1e3c72;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   4. FORM INPUTS
+   ========================================================================== */
+input[type="text"] {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #ccd1d9;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fcfdfd;
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #2a5298;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(42, 82, 152, 0.15);
+}
+
+/* Gray out readonly/prefilled event details dynamically if needed */
+input[id^="event"] {
+  background-color: #f8fafc;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+/* ==========================================================================
+   5. BUTTONS
+   ========================================================================== */
+button {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: block;
+}
+
+/* Primary Submit Button */
+#submitBtn {
+  background-color: #10b981; /* Premium Emerald Green */
+  color: white;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+#submitBtn:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+}
+
+#submitBtn:active {
+  transform: translateY(1px);
+}
+
+/* View Ticket Button (Navigation) */
+button[onclick*="ticket.html"] {
+  background-color: #ffffff;
+  color: #2a5298;
+  border: 2px solid #2a5298;
+  margin-top: 1.5rem;
+}
+
+button[onclick*="ticket.html"]:hover {
+  background-color: #2a5298;
+  color: #ffffff;
+}
+
+/* Decorative Divider */
+hr {
+  border: 0;
+  height: 1px;
+  background: #e2e8f0;
+  margin: 1.5rem 0;
+}
+
+/* ==========================================================================
+   6. M-PESA PAYMENT BOX
+   ========================================================================== */
+.payment-box {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.payment-box h3 {
+  color: #15803d; /* Safaricom/M-Pesa tone */
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+}
+
+.payment-box p {
+  font-size: 0.95rem;
+  color: #1f2937;
+  margin-bottom: 0.4rem;
+}
+
+.payment-box p:last-child {
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* Quick pass interactive focus styling */
+.payment-box p b {
+  color: #111827;
+}

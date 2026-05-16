@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickPass — Booking Live Dashboard</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 { font-size: 1.75rem; font-weight: 700; }
+    p { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+
+    .refresh-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .refresh-btn:hover { background: #4f46e5; }
+
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow-x: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    th, td { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    th { background: rgba(255, 255, 255, 0.02); color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+    tr:last-child td { border-bottom: none; }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge.approved { background: rgba(16, 185, 129, 0.15); color: #03ff10; }
+    .badge.pending { background: rgba(245, 158, 11, 0.15); color: #ffc157; }
+    .badge.declined { background: rgba(239, 68, 68, 0.15); color: #b44141; }
+
+    .loader { text-align: center; padding: 40px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <header>
+    <div>
+      <h1>📊 LIVE BOOKING  QUICK PASS</h1>
+      <p>Data synced directly from your Admin Sheet record.</p>
+    </div>
+    <button class="refresh-btn" onclick="fetchDashboardData()">🔄 Refresh Matrix</button>
+  </header>
+
+  <div class="table-container">
+    <div id="loader" class="loader">Fetching records from Admin Sheets...</div>
+    <table id="data-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>Attendee Name</th>
+          <th>Phone Reference</th>
+          <th>Assigned Event</th>
+          <th>Venue Location</th>
+          <th>Price Paid</th>
+          <th>Gate Status</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- Google Sheet Data rows will dynamically inject here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // 1. PLACE YOUR WEb APP URL HERE
+  const API_URL = "https://script.google.com/macros/s/AKfycbzt3aWv55uLSQiv4s-vzlK74K3WDK-NX9d0I_-VHXV-_r8Qf9v3iTL-dTxzywTl457biw/exec";
+
+  // 2. Global JSONP Callback handler that runs when the data drops
+  window.renderDashboard = function(data) {
+      document.getElementById('loader').style.display = 'none';
+      const table = document.getElementById('data-table');
+      const tbody = document.getElementById('table-body');
+      
+      tbody.innerHTML = ""; // Clear old rows
+      
+      if(data.length === 0) {
+          document.getElementById('loader').style.display = 'block';
+          document.getElementById('loader').textContent = "No records found in spreadsheet.";
+          return;
+      }
+
+      table.style.display = 'table';
+
+      data.forEach(row => {
+          const tr = document.createElement('tr');
+          
+          // Match badge colors based on spelling variations
+          const status = String(row.status).trim().toUpperCase();
+          let badgeClass = 'declined';
+          if (status === 'APPROVED' || status === 'CONFIRMED' || status === 'PAID') badgeClass = 'approved';
+          else if (status === 'PENDING') badgeClass = 'pending';
+
+          tr.innerHTML = `
+              <td style="font-weight: 500;">${row.name || '—'}</td>
+              <td style="color: #94a3b8;">${row.phone || '—'}</td>
+              <td>${row.event || '—'}</td>
+              <td>${row.venue || '—'}</td>
+              <td style="font-weight: 600; color: #a5b4fc;">${row.price || '—'}</td>
+              <td><span class="badge ${badgeClass}">${status || 'PENDING'}</span></td>
+          `;
+          tbody.appendChild(tr);
+      });
+  };
+
+  // 3. Injects the script element to load sheet data via JSONP
+  function fetchDashboardData() {
+      document.getElementById('data-table').style.display = 'none';
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('loader').textContent = "Connecting to API core...";
+
+      // Delete old script instance if refreshing
+      const oldScript = document.getElementById('jsonp-sync-script');
+      if (oldScript) oldScript.remove();
+
+      const script = document.createElement('script');
+      script.id = 'jsonp-sync-script';
+      // Append a timestamp cache buster so it always grabs the freshest sheet data
+      script.src = `${API_URL}?callback=renderDashboard&_ts=${Date.now()}`;
+      script.onerror = function() {
+          document.getElementById('loader').textContent = "Sync failure. Verify deployment configurations.";
+          document.getElementById('loader').style.color = '#ef4444';
+      };
+      
+      document.body.appendChild(script);
+  }
+
+  // Load automatically on launch
+  window.addEventListener('DOMContentLoaded', fetchDashboardData);
+</script>
+
+</body>
+</html>

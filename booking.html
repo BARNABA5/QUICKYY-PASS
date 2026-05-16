@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickPass - Booking</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="main-header">
+  <h1>Complete Booking</h1>
+</header>
+
+<div class="container">
+
+  <div class="booking-card">
+
+    <h2>Booking Details</h2>
+
+    <!-- USER INPUT -->
+    <input type="text" id="userName" placeholder="Enter Name">
+    <input type="text" id="userPhone" placeholder="Enter Phone">
+
+    <input type="text" id="eventName" placeholder="Event Name">
+    <input type="text" id="eventVenue" placeholder="Venue">
+    <input type="text" id="eventPrice" placeholder="Price">
+
+    <button id="submitBtn">Save Booking</button>
+
+    <hr>
+
+    <!-- PAYMENT SECTION -->
+    <div class="payment-box">
+      <h3>M-PESA PAYMENT DETAILS</h3>
+
+      <p><b>Pay To:</b> 0743932033</p>
+      <p><b>Name:</b> MUTUA</p>
+      <p>Please complete payment before approval</p>
+    </div>
+
+    <!-- VIEW TICKET -->
+    <button onclick="window.location.href='ticket.html'">View Ticket</button>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
