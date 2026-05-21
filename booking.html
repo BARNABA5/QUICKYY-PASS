@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuickPass - Booking</title>
 
-  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <header class="main-header">
@@ -16,27 +13,28 @@
 </header>
 
 <div class="container">
-
   <div class="booking-card">
-
     <h2>Booking Details</h2>
 
-    <!-- USER INPUT -->
-    <input type="text" id="userName" placeholder="Enter Name">
-    <input type="text" id="userSecondName" placeholder="Enter Second Name  ">
+    <!-- USER INPUT FIELDS -->
+    <input type="text" id="userNames" placeholder="Enter Names">
+   
+    
+    <!-- CRITICAL ADDITION: Matches your Admin Sheet Dashboard requirements -->
+    <input type="tel" id="userPhone" placeholder="Enter M-PESA Phone Number">
 
     <input type="text" id="eventName" placeholder="Event Name">
     <input type="text" id="eventVenue" placeholder="Venue">
     <input type="text" id="eventPrice" placeholder="Price">
 
-    <button id="submitBtn">Save Booking</button>
+    <!-- Added direct onclick function call to link smoothly to script.js -->
+    <button id="submitBtn" onclick="saveBookingData()">Save Booking</button>
 
     <hr>
 
     <!-- PAYMENT SECTION -->
     <div class="payment-box">
       <h3>M-PESA PAYMENT DETAILS</h3>
-
       <p><b>Pay To:</b> 0743932033</p>
       <p><b>Name:</b> MUTUA</p>
       <p>Please complete payment before approval</p>
@@ -44,12 +42,395 @@
 
     <!-- VIEW TICKET -->
     <button onclick="window.location.href='ticket.html'">View Ticket</button>
-
   </div>
-
 </div>
 
 <script src="script.js"></script>
-
 </body>
+
+
+<style>/* ==========================================
+   QuickPass — Global Reset & Variables
+   ========================================== */
+:root {
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  
+  /* Text Contrast Color Core */
+  --text-main: #f8fafc;        /* Brilliant clear white */
+  --text-muted: #94a3b8;       /* Clean silver-gray for parameters */
+  --text-price: #38bdf8;       /* Vibrant cyan accent for pricing readability */
+  
+  --accent: #6366f1;          /* Premium Indigo */
+  --accent-hover: #4f46e5;
+  --success: #10b981;          /* M-Pesa Premium Emerald Green */
+  --success-hover: #059669;
+  --radius: 20px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  min-height: 100vh;
+  padding: 40px 16px;
+  line-height: 1.5;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ==========================================
+   Header Component Branding 
+   ========================================== */
+.main-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.main-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: #ffffff; 
+  background: linear-gradient(to right, #ffffff, #a5b4fc);
+  display: block;
+  width: 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.main-header p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 8px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ==========================================
+   Events Responsive Layout Grid (Home Page)
+   ========================================== */
+.events {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 10px 0;
+}
+
+.event-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.15);
+}
+
+.event-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.event-card h2, .event-card p, .event-card h3 { padding: 0 20px; }
+.event-card h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-top: 18px; margin-bottom: 8px; }
+.event-card p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 6px; }
+.event-card h3 { color: var(--text-price); font-size: 1.35rem; font-weight: 800; margin-top: 12px; margin-bottom: 20px; }
+.event-card a { text-decoration: none; margin-top: auto; padding: 0 20px 20px 20px; }
+
+/* ==========================================
+   PRO BOOKING MODULE COMPONENTS
+   ========================================== */
+.booking-card {
+  background: rgba(30, 27, 75, 0.4);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 35px 30px;
+  max-width: 480px;
+  margin: 0 auto;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.booking-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 25px;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+/* Premium Ultra-Clean Forms */
+.booking-card input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  outline: none;
+  transition: var(--transition);
+}
+
+/* Dynamic glow response on user active input focus */
+.booking-card input:focus {
+  border-color: var(--accent);
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+/* Read-Only State for Auto-Filled Event Meta Fields */
+.booking-card input[readonly] {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Interactive Execution Trigger UI Buttons */
+.book-btn, #submitBtn {
+  width: 100%;
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  padding: 15px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: block;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+#submitBtn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+#submitBtn:active {
+  transform: translateY(0);
+}
+
+/* Clean structural divider line styling rules */
+hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--card-border), transparent);
+  margin: 30px 0;
+}
+
+/* ==========================================
+   PREMIUM M-PESA PAYMENT PLATFORM CARD
+   ========================================== */
+/* ==========================================
+   PREMIUM SAFARICOM M-PESA PAYMENT CARD
+   ========================================== */
+.payment-box {
+  /* Safaricom Premium Brand Green Linear Gradient base */
+  background: linear-gradient(135deg, rgba(74, 175, 79, 0.16) 0%, rgba(46, 125, 50, 0.05) 100%);
+  border: 1px solid rgba(74, 175, 79, 0.35);
+  border-radius: 14px;
+  padding: 22px 20px;
+  margin-bottom: 25px;
+  position: relative;
+  overflow: hidden;
+  
+  /* Left accent border split: 70% Safaricom Green, 30% M-Pesa Red */
+  border-left: 5px solid #4baf4f; 
+}
+
+/* Creates a beautiful Safaricom branding highlight reflection in the corner */
+.payment-box::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 140px;
+  height: 140px;
+  background: #4baf4f;
+  opacity: 0.15;
+  filter: blur(35px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Red accent footer indicator line simulating corporate M-Pesa color breaks */
+.payment-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, #4baf4f 70%, #e53935 30%);
+  opacity: 0.8;
+}
+
+.payment-box h3 {
+  color: #4baf4f; /* Safaricom Core Green */
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Adds a tiny red dot asset next to header text matching standard corporate lookbook guidelines */
+.payment-box h3::before {
+  content: '•';
+  color: #e53935; /* M-Pesa Accent Red */
+  font-size: 1.2rem;
+  line-height: 0;
+}
+
+.payment-box p {
+  font-size: 0.95rem;
+  color: #f1f5f9;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* The structural warning text message wrapper at the bottom */
+.payment-box p:last-child {
+  margin-bottom: 0;
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: #a7f3d0; 
+  font-weight: 500;
+  justify-content: center;
+  text-align: center;
+  background: rgba(75, 175, 79, 0.1);
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px dashed rgba(74, 175, 79, 0.2);
+}
+
+/* Ultra-sharp corporate monospace badges for copy targets */
+.payment-box b {
+  color: #ffffff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: #1e293b; /* Strong dark contrast container for legibility */
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.05em;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Adds a soft glowing badge block in the design container background */
+.payment-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 120px;
+  height: 120px;
+  background: var(--success);
+  opacity: 0.1;
+  filter: blur(30px);
+  border-radius: 50%;
+}
+
+.payment-box h3 {
+  color: #10b981;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.payment-box p {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.payment-box p:last-child {
+  margin-bottom: 0;
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: #a7f3d0;
+  font-weight: 500;
+}
+
+.payment-box b {
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 1.05rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Secondary Actions (View Ticket Secondary Anchor Buttons) */
+.booking-card button:not(#submitBtn) {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  border: 1px solid var(--card-border);
+  padding: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.booking-card button:not(#submitBtn):hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================
+   Media Query Structural Threshold Breakpoints
+   ========================================== */
+@media (max-width: 480px) {
+  body { padding: 25px 12px; }
+  .main-header { margin-bottom: 30px; }
+  .main-header h1 { font-size: 1.85rem; }
+  .events { grid-template-columns: 1fr; gap: 20px; }
+  .booking-card { padding: 25px 20px; }
+}</style>
 </html>
