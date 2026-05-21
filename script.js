@@ -1,5 +1,5 @@
 // Paste your deployed Google Web App URL here
-const API_URL = "https://script.google.com/macros/s/AKfycbyVwo3ggg-sgsv0YmS14NmZw-pC-O-6WrKWjb2e2LbvjUOb-63HibMY_Ahii27T45M89A/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxKu6iSVarn_Euk94kjVBtL3fhnSfvAWYjjxL_ikh3G5FnhAFsG9WcZxUtX_d1RBwro5A/exec";
 
 document.getElementById('submitBtn').addEventListener('click', async function() {
     // 1. Capture values from input fields
@@ -41,11 +41,10 @@ document.getElementById('submitBtn').addEventListener('click', async function() 
         });
 
         // 5. Successful execution fallback
-        alert("Booking saved successfully! Please complete your M-PESA payment.");
-        
-        // Automatically redirect to their specific ticket using their phone number reference!
-        window.location.href = `tickets.html?phone=${encodeURIComponent(phone)}`;
+alert("Booking saved successfully! Please complete your M-PESA payment.");
 
+// FIXED: Changed 'tickets.html' to 'ticket.html' to match your actual file name
+window.location.href = `ticket.html?phone=${encodeURIComponent(phone)}`;
     } catch (error) {
         console.error("Error submitting booking:", error);
         alert("Something went wrong while saving your booking. Please try again.");
