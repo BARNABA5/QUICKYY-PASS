@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>QuickPass - Home</title>
 
-  <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
@@ -103,4 +102,271 @@
 <script src="script.js"></script>
 
 </body>
+   <style>
+:root {
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.1);
+  
+  /* Text Contrast Color Core */
+  --text-main: #f8fafc;        /* Brilliant clear white */
+  --text-muted: #94a3b8;       /* Clean silver-gray for parameters */
+  --text-price: #38bdf8;       /* Vibrant cyan accent for pricing readability */
+  
+  --accent: #6366f1;          /* Premium Indigo */
+  --accent-hover: #4f46e5;
+  --radius: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  min-height: 100vh;
+  padding: 30px 16px; /* Optimized fallback for small viewports */
+  line-height: 1.5;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ==========================================
+   Header Component Branding 
+   ========================================== */
+.main-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.main-header h1 {
+  font-size: 2.2rem; /* Scaled down slightly for mobile headers */
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  
+  /* 1. Safe solid fallback color if clipping fails */
+  color: #ffffff; 
+  
+  /* 2. The gradient styling */
+  background: linear-gradient(to right, #ffffff, #a5b4fc);
+  
+  /* 3. Forces the block context so clipping calculates correctly */
+  display: block;
+  width: 100%;
+  
+  /* 4. Cross-browser text clipping properties */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.main-header p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 8px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ==========================================
+   Events Layout Grid (Fluid Responsive)
+   ========================================== */
+.events {
+  display: grid;
+  /* Automatically shifts between multi-column and single stack based on space */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 10px 0;
+}
+
+/* ==========================================
+   Event Card Architecture
+   ========================================== */
+.event-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.15);
+}
+
+.event-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.event-card h2,
+.event-card p,
+.event-card h3 {
+  padding: 0 20px; /* Adaptive interior spacing */
+}
+
+.event-card h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-top: 18px;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.event-card p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 6px;
+}
+
+.event-card h3 {
+  color: var(--text-price);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.event-card a {
+  text-decoration: none;
+  margin-top: auto; 
+  padding: 0 20px 20px 20px;
+}
+
+/* ==========================================
+   Booking Module Components (Clean Mobile Fit)
+   ========================================== */
+.booking-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+}
+
+.booking-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Mobile Touch-Friendly Inputs */
+.booking-card input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+.booking-card input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+/* Action Execution Buttons */
+.book-btn, .booking-card button {
+  width: 100%;
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: block;
+  margin-top: 10px;
+}
+
+.book-btn:hover, .booking-card button:hover {
+  background: var(--accent-hover);
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--card-border);
+  margin: 20px 0;
+}
+
+/* M-Pesa Info Box */
+.payment-box {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 15px;
+}
+
+.payment-box h3 {
+  color: #10b981;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.payment-box p {
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  margin-bottom: 4px;
+}
+
+/* ==========================================
+   Media Query Structural Threshold Breakpoints
+   ========================================== */
+@media (max-width: 480px) {
+  body {
+    padding: 20px 12px;
+  }
+  
+  .main-header {
+    margin-bottom: 30px;
+  }
+  
+  .main-header h1 {
+    font-size: 1.85rem;
+  }
+  
+  .events {
+    grid-template-columns: 1fr; /* Stacks to exactly 1 single column card on small phones */
+    gap: 20px;
+  }
+  
+  .booking-card {
+    padding: 20px 15px;
+  }
+}
+
+
+</style>
 </html>
